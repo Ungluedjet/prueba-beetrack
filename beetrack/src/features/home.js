@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Alert } from 'react-native'
 import { connect } from 'react-redux';
-import { Container, Header, Content, Text, List, ListItem, Input, DatePicker, Right, Left} from 'native-base';
+import { Container, Content, Text, List, ListItem, Input, DatePicker, Right, Left} from 'native-base';
 import Proptypes from 'prop-types';
 import axios from 'axios';
 import { apiUrl, url } from '../const/const';
-import { guardarNoticias } from './../actions/actions';
+import { guardarNoticias, agregarFavoritos } from './../actions/actions';
 import moment from 'moment';
 
 const propTypes = {
@@ -14,7 +14,7 @@ const propTypes = {
     }).isRequired,
 };
 
-function Home({navigation, guardarNoticias, state}) {
+function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
     const[pais, setPais] = useState('');
     const[termino, setTermino] = useState('');
     const[fechaFrom, setFechaFrom] = useState('');
@@ -43,7 +43,6 @@ function Home({navigation, guardarNoticias, state}) {
             );
         } else {
             try {
-                console.log(url + 'country=' + pais + '&q=' + termino + '&from=' + fechaFrom + '&to=' + fechaTo + '&apiKey=576bfc69ae6e4995b8e695f9bbbed374');
                 axios.get(url + 'country=' + pais + '&q=' + termino + '&from=' + fechaFrom + '&to=' + fechaTo + '&apiKey=576bfc69ae6e4995b8e695f9bbbed374')
                 .then(res => {
                     guardarNoticias(res.data.articles);
@@ -54,9 +53,13 @@ function Home({navigation, guardarNoticias, state}) {
         }
     }
 
+    const addFavoritos = (value) => {
+        agregarFavoritos(value);
+    }
+
     const renderItem = () => {
         return (
-            state.map((value) => {
+            state.guardarNoticias.map((value) => {
                 return[
                     <ListItem>
                         <Left>
@@ -68,7 +71,7 @@ function Home({navigation, guardarNoticias, state}) {
                             </Text>
                         </Left>
                         <Right>
-                            <Button title={'*'}/>
+                            <Button title={'*'} onPress={()=>addFavoritos(value)}/>
                         </Right>
                     </ListItem>
                 ];
@@ -123,7 +126,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    guardarNoticias: (lista) => dispatch(guardarNoticias(lista))
+    guardarNoticias: (lista) => dispatch(guardarNoticias(lista)),
+    agregarFavoritos: (value) => dispatch(agregarFavoritos(value)),
 })
 
 Home.propTypes = propTypes;

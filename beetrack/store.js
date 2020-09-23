@@ -1,9 +1,8 @@
-import { createStore } from 'redux';
-import { guardarNoticias, agregarFavoritos } from './src/reducers/reducers';
+import { createStore, combineReducers } from 'redux';
+import reducer from './src/reducers/reducers';
 
 const configureStore = () => createStore(
-    guardarNoticias,
-    agregarFavoritos,
+    reducer,
 );
 
 export default configureStore;
