@@ -54,7 +54,8 @@ function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
     }
 
     const addFavoritos = (value) => {
-        agregarFavoritos(value);
+        const found = state.agregarFavoritos.some(obj => obj.title === value.title);
+        if (!found) agregarFavoritos(value);
     }
 
     const renderItem = () => {
