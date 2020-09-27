@@ -10,7 +10,7 @@ export default function TabNavigator() {
       <Tab.Navigator
         initialRoutName="Home">
         <Tab.Screen name="Home" component={StackNavigator} />
-        <Tab.Screen name="Favourite" component={Favourite} />
+        <Tab.Screen name="Favourite" component={Favourite} options={{title: 'favoritos'}}/>
       </Tab.Navigator>
   );
 }

@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Content, Text, Left, Right, List, ListItem  } from 'native-base';
+import { Container, Content, Text, Left, List, ListItem, Card, CardItem, Header  } from 'native-base';
 import Proptypes from 'prop-types';
 
 const propTypes = {
@@ -15,16 +15,18 @@ function Favourite({state}) {
         return (
             state.agregarFavoritos.map((value) => {
                 return[
-                    <ListItem>
-                        <Left>
-                            <Text 
-                                left
-                                style={(width=10)}
-                                onPress={()=>navigation.navigate('Noticia', {item : value})}>
-                                {value.title}
-                            </Text>
-                        </Left>
-                    </ListItem>
+                    <Card>
+                        <CardItem style={{ backgroundColor: '#28C1FF'}}>
+                            <Left>
+                                {console.log(value)}
+                                <Text 
+                                    left
+                                    style={(width=10)}>
+                                    {value.title}
+                                </Text>
+                            </Left>
+                        </CardItem>
+                    </Card>
                 ];
             })  
         );
@@ -32,7 +34,7 @@ function Favourite({state}) {
 
     return (
         <Container>
-            <Content>
+            <Content style={{ backgroundColor: '#52D8FC'}}>
                 <List>
                    {renderItem()}
                 </List>

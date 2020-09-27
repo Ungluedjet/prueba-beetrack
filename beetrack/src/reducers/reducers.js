@@ -13,7 +13,7 @@ const guardarNoticias = (state = [], action) => {
 const agregarFavoritos = (state = [], action) => {
     switch (action.type) {
         case AGREGAR_FAVORITOS:
-            return [...state, action.value];
+            return action.lista;
         default:
             return state;
     }

@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Alert } from 'react-native'
 import { connect } from 'react-redux';
-import { Container, Content, Text, List, ListItem, Input, DatePicker, Right, Left} from 'native-base';
+import { Container, Content, Text, List, ListItem, Input, DatePicker, Right, Left, Card, CardItem} from 'native-base';
 import Proptypes from 'prop-types';
 import axios from 'axios';
-import { apiUrl, url } from '../const/const';
+import { apiUrl, url, amazonUrlAdd, amazonUrlAll } from '../const/const';
 import { guardarNoticias, agregarFavoritos } from './../actions/actions';
 import moment from 'moment';
 
@@ -24,6 +24,11 @@ function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
         axios.get(apiUrl)
             .then(res => {
                 guardarNoticias(res.data.articles);
+            })
+
+        axios.get(amazonUrlAll)
+            .then(res => {
+                agregarFavoritos(res.data.article);
             })
         } catch (e) {
             console.log(e);
@@ -54,27 +59,47 @@ function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
     }
 
     const addFavoritos = (value) => {
-        const found = state.agregarFavoritos.some(obj => obj.title === value.title);
-        if (!found) agregarFavoritos(value);
+        let id = (Math.random() * 10000000 | 0)
+        JSON.stringify(value);
+        try{
+        axios.post(amazonUrlAdd, {
+            id,
+            title: value.title,
+            author: value.author,
+            description: value.description,
+            url: value.url,
+            urltoimage: value.urlToImage,
+            publishedat: value.publishedAt,
+            content: value.content,
+            sourceid: value.source.id,
+            sourcename: value.source.name
+        }).then(res => {
+                agregarFavoritos(res.data.article);
+            })
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     const renderItem = () => {
         return (
             state.guardarNoticias.map((value) => {
                 return[
-                    <ListItem>
-                        <Left>
-                            <Text 
-                                left
-                                style={(width=10)}
-                                onPress={()=>navigation.navigate('Noticia', {item : value})}>
-                                {value.title}
-                            </Text>
-                        </Left>
-                        <Right>
-                            <Button title={'*'} onPress={()=>addFavoritos(value)}/>
-                        </Right>
-                    </ListItem>
+                    <Card>
+                        <CardItem style={{ backgroundColor: '#28C1FF'}}>
+                            <Left>
+                                <Text 
+                                    left
+                                    style={(width=10)}
+                                    onPress={()=>navigation.navigate('Noticia', {item : value})}>
+                                    {value.title}
+                                </Text>
+                            </Left>
+                            <Right>
+                                <Button title={'*'} onPress={()=>addFavoritos(value)}/>
+                            </Right>
+                        </CardItem>
+                    </Card>
                 ];
             })  
         );
@@ -96,7 +121,7 @@ function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
 
     return (
         <Container>
-            <Content> 
+            <Content style={{ backgroundColor: '#52D8FC'}}> 
                 <Input 
                     placeholder={'ingrese el termino'}
                     value={termino}
@@ -128,7 +153,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     guardarNoticias: (lista) => dispatch(guardarNoticias(lista)),
-    agregarFavoritos: (value) => dispatch(agregarFavoritos(value)),
+    agregarFavoritos: (lista) => dispatch(agregarFavoritos(lista)),
 })
 
 Home.propTypes = propTypes;

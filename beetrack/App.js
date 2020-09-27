@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
+import { BackHandler } from 'react-native';
 import { Provider } from 'react-redux';
 import TabNavigator from './src/navigation/tabNavigator';
 import { NavigationContainer } from '@react-navigation/native';
@@ -13,6 +14,7 @@ const store = configureStore();
 const App: () => React$Node = () => {
 
   useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", function(){return true});
     SplashScreen.hide();
   },[])
 

@@ -5,9 +5,9 @@ const guardarNoticias = lista => ({
     lista
 });
 
-const agregarFavoritos = value => ({
+const agregarFavoritos = lista => ({
     type: AGREGAR_FAVORITOS,
-    value
+    lista
 });
 
 export {
