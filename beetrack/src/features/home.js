@@ -60,7 +60,6 @@ function Home({navigation, guardarNoticias, agregarFavoritos ,state}) {
 
     const addFavoritos = (value) => {
         let id = (Math.random() * 10000000 | 0)
-        JSON.stringify(value);
         try{
         axios.post(amazonUrlAdd, {
             id,
